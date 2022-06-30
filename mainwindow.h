@@ -9,7 +9,6 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QImage> 
-#include "opencv2/opencv.hpp"
 
 QT_BEGIN_NAMESPACE
 class QAction;

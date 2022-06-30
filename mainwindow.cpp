@@ -4,11 +4,8 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QIcon>
-#include "windows.h"
-
 #include "mainwindow.h"
 
-using namespace cv;
 
 
 

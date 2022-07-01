@@ -6,6 +6,10 @@
 #include <QIcon>
 #include "mainwindow.h"
 
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+
+using namespace cv; 
 
 
 
@@ -40,10 +44,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
   /* Content Layout */
   contentLayout = new QVBoxLayout(content);
+  scaleFactor = 1;  
   imageLabel = new QLabel();
-  scaleFactor = 1;
+  imageLabel->setBackgroundRole(QPalette::Base);
+  imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+  imageLabel->setScaledContents(true);  
 
-  contentLayout->addWidget(imageLabel);
+  scrollArea = new QScrollArea;
+  scrollArea->setBackgroundRole(QPalette::Dark);
+  scrollArea->setWidget(imageLabel);
+
+  contentLayout->addWidget(scrollArea);
 
 
 
@@ -67,28 +78,25 @@ void MainWindow::onStart()
     QString fileName = QFileDialog::getOpenFileName(this, "Open Input Image", QDir::currentPath(), "Images (*.jpg *.png *.bmp)");
     if(QFile::exists(fileName))
     {
-      QImageReader reader(fileName);
-      reader.setAutoTransform(true);
-      const QImage newImage = reader.read();
-      if (newImage.isNull()) {
-        return;
-      }
-
-      setImage(newImage);
+      mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
+      setImage(mat);
 
       const QString message = tr("Opened \"%1\", %2x%3, Depth: %4")
         .arg(QDir::toNativeSeparators(fileName)).arg(image.width()).arg(image.height()).arg(image.depth());
       statusBar()->showMessage(message);
-
-
     }
 }
 
-void MainWindow::setImage(const QImage &newImage)
+void MainWindow::setImage(const Mat &src)
 {
+
+  Mat dest;
+  cvtColor(src, dest,COLOR_BGR2RGB);
+  const QImage newImage(dest.data, dest.cols, dest.rows, QImage::Format_RGB888);
+
   image = newImage;
   imageLabel->setPixmap(QPixmap::fromImage(image));
-  scaleFactor = 1.0;
+  imageLabel->adjustSize();
 }
 
 void MainWindow::onStop()
@@ -98,20 +106,26 @@ void MainWindow::onStop()
 
 void MainWindow::onZoomIn()
 {
-  scaleImage(1.25);
+  scaleFactor *= 1.25;
+  scaleImage();
 }
 
 
 void MainWindow::onZoomOut()
 {
-  scaleImage(0.75);
+  scaleFactor *= 0.75;
+  scaleImage();
 }
 
 
-void MainWindow::scaleImage(double factor)
+void MainWindow::scaleImage()
 {
-  image = image.scaled(image.size() * factor, Qt::KeepAspectRatio);
-  imageLabel->setPixmap(QPixmap::fromImage(image));
+  // image = image.scaled(image.size() * factor, Qt::KeepAspectRatio);
+  // imageLabel->setPixmap(QPixmap::fromImage(image));
+  Mat dest;
+  cv::resize(mat, dest, Size(), scaleFactor, scaleFactor, (scaleFactor < 1) ? INTER_AREA : INTER_LINEAR);
+  qDebug() << scaleFactor; 
+  setImage(dest);
 }
 
 void MainWindow::on_inputPushButton_pressed()
@@ -119,7 +133,7 @@ void MainWindow::on_inputPushButton_pressed()
     QString fileName = QFileDialog::getOpenFileName(this, "Open Input Image", QDir::currentPath(), "Images (*.jpg *.png *.bmp)");
     if(QFile::exists(fileName))
     {
-
+      
     }
 }
 

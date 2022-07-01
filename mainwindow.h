@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QImage>
+#include "opencv2/opencv.hpp"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -44,8 +45,8 @@ private slots:
 
 
 private:
-  void setImage(const QImage &newImage);
-  void scaleImage(double factor);
+  void setImage(const cv::Mat &src);
+  void scaleImage();
 
     QPushButton *quitButton;
     QPushButton *startButton;
@@ -57,6 +58,7 @@ private:
     QLabel *imageLabel;
   QScrollArea* scrollArea;
   double scaleFactor;
+  cv::Mat mat; 
 };
 
 #endif // MAINWINDOW_H

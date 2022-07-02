@@ -25,11 +25,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += /usr/include/opencv4
 LIBS += -L/usr/lib -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -lopencv_imgcodecs -lopencv_videoio
 
-SOURCES += \
+SOURCES +=  \
         main.cpp \
         mainwindow.cpp
 
-HEADERS += \
+HEADERS +=  \
         mainwindow.h
 
 

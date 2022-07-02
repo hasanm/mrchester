@@ -11,8 +11,6 @@
 
 using namespace cv; 
 
-
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -48,11 +46,12 @@ MainWindow::MainWindow(QWidget *parent) :
   imageLabel = new QLabel();
   imageLabel->setBackgroundRole(QPalette::Base);
   imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-  imageLabel->setScaledContents(true);  
+  imageLabel->setScaledContents(true);
 
   scrollArea = new QScrollArea;
   scrollArea->setBackgroundRole(QPalette::Dark);
   scrollArea->setWidget(imageLabel);
+  
 
   contentLayout->addWidget(scrollArea);
 
@@ -87,16 +86,34 @@ void MainWindow::onStart()
     }
 }
 
+
+void MainWindow::scaleImage()
+{
+  Mat dest;
+
+  int dcols = round(mat.cols  * scaleFactor);
+  int drows = round(mat.rows  * scaleFactor);
+    
+  cv::resize(mat, dest, Size(dcols, drows), 0, 0, (scaleFactor < 1) ? INTER_AREA : INTER_LINEAR);
+  qDebug() << scaleFactor << ": " << dcols << "," << drows; 
+  setImage(dest);
+}
+
 void MainWindow::setImage(const Mat &src)
 {
 
   Mat dest;
   cvtColor(src, dest,COLOR_BGR2RGB);
-  const QImage newImage(dest.data, dest.cols, dest.rows, QImage::Format_RGB888);
+  const QImage newImage((uchar*) dest.data, dest.cols, dest.rows, dest.step, QImage::Format_RGB888);
+  // const QImage newImage(dest.data, dest.cols, dest.rows, QImage::Format_RGB888);
 
   image = newImage;
-  imageLabel->setPixmap(QPixmap::fromImage(image));
+  QPixmap pix;
+  pix = QPixmap::fromImage(image); 
+  imageLabel->setPixmap(pix);
   imageLabel->adjustSize();
+
+  QRect r1(100, 200, 11, 16);
 }
 
 void MainWindow::onStop()
@@ -106,26 +123,15 @@ void MainWindow::onStop()
 
 void MainWindow::onZoomIn()
 {
-  scaleFactor *= 1.25;
+  scaleFactor += 0.05;
   scaleImage();
 }
 
 
 void MainWindow::onZoomOut()
 {
-  scaleFactor *= 0.75;
+  scaleFactor -= 0.05;
   scaleImage();
-}
-
-
-void MainWindow::scaleImage()
-{
-  // image = image.scaled(image.size() * factor, Qt::KeepAspectRatio);
-  // imageLabel->setPixmap(QPixmap::fromImage(image));
-  Mat dest;
-  cv::resize(mat, dest, Size(), scaleFactor, scaleFactor, (scaleFactor < 1) ? INTER_AREA : INTER_LINEAR);
-  qDebug() << scaleFactor; 
-  setImage(dest);
 }
 
 void MainWindow::on_inputPushButton_pressed()

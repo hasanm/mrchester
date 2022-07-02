@@ -48,14 +48,14 @@ private:
   void setImage(const cv::Mat &src);
   void scaleImage();
 
-    QPushButton *quitButton;
-    QPushButton *startButton;
-    QPushButton *stopButton;
-    QPushButton *zoomInButton;
-    QPushButton *zoomOutButton;
-    QVBoxLayout *contentLayout;
-    QImage image;
-    QLabel *imageLabel;
+  QPushButton *quitButton;
+  QPushButton *startButton;
+  QPushButton *stopButton;
+  QPushButton *zoomInButton;
+  QPushButton *zoomOutButton;
+  QVBoxLayout *contentLayout;
+  QImage image;
+  QLabel *imageLabel;
   QScrollArea* scrollArea;
   double scaleFactor;
   cv::Mat mat; 

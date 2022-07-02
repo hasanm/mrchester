@@ -8,6 +8,7 @@
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 using namespace cv; 
 
@@ -78,6 +79,7 @@ void MainWindow::onStart()
     if(QFile::exists(fileName))
     {
       mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
+      rectangle(mat, Point(0,0), Point(200, 300), Scalar(255,0,0), 2, LINE_8);
       setImage(mat);
 
       const QString message = tr("Opened \"%1\", %2x%3, Depth: %4")

@@ -1,2 +1,2 @@
-#define Trial_VERSION_MAJOR @Trial_VERSION_MAJOR@
-#define Trial_VERSION_MINOR @Trial_VERSION_MINOR@
+#define MrChester_VERSION_MAJOR @MrChester_VERSION_MAJOR@
+#define MrChester_VERSION_MINOR @MrChester_VERSION_MINOR@

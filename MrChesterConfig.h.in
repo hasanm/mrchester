@@ -1,0 +1,2 @@
+#define Trial_VERSION_MAJOR @Trial_VERSION_MAJOR@
+#define Trial_VERSION_MINOR @Trial_VERSION_MINOR@

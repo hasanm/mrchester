@@ -14,6 +14,7 @@ project(MrChester VERSION 1.0 LANGUAGES CXX)
 configure_file(MrChesterConfig.h.in MrChesterConfig.h)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(OpenCV REQUIRED )
 
 add_executable(MrChester
         main.cpp
@@ -21,7 +22,8 @@ add_executable(MrChester
 )
 
 target_include_directories(MrChester PUBLIC
-                           "${PROJECT_BINARY_DIR}")
+                           "${PROJECT_BINARY_DIR}"
+                           "${OpenCV_INCLUDE_DIRS}")
 
 
-target_link_libraries(MrChester Qt5::Widgets)
+target_link_libraries(MrChester Qt5::Widgets "${OpenCV_LIBS}")

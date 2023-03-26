@@ -11,6 +11,7 @@
 #include <QImage>
 
 #include <opencv2/opencv.hpp>
+#include "graphicwindow.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -40,7 +41,7 @@ protected:
 private slots:
     void on_inputPushButton_pressed();
     void onLoad();
-    void onStop();
+    void onGraphic();
     void on_outputPushButton_pressed();
   void onZoomIn();
   void onZoomOut();
@@ -56,7 +57,7 @@ private:
 
   QPushButton *quitButton;
   QPushButton *loadButton;
-  QPushButton *stopButton;
+  QPushButton *graphicButton;
   QPushButton *zoomInButton;
   QPushButton *zoomOutButton;
   QSlider *thresholdSlider;
@@ -75,6 +76,8 @@ private:
   QMenu *fileMenu;
   QAction *exitAction;
   QAction *basicThresholdAction;
+
+  GraphicWindow *graphicWindow; 
 
 
   int sliderValue; 

@@ -20,6 +20,8 @@ add_executable(MrChester
         main.cpp
         mainwindow.cpp
         DrawableImage.cpp
+        graphicwindow.cpp
+        layoutitem.cpp
 )
 
 target_include_directories(MrChester PUBLIC

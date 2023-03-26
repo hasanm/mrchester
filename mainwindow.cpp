@@ -47,9 +47,9 @@ MainWindow::MainWindow(QWidget *parent) :
   sliderLabel = new QLabel(QString("Slider Value : "), this);
   topLayout->addWidget(sliderLabel);
 
-  stopButton = new QPushButton(QString("Stop CV"), this);
-  connect (stopButton, &QPushButton::clicked, this, &MainWindow::onStop);
-  topLayout->addWidget(stopButton);
+  graphicButton = new QPushButton(QString("Open Graphics Scene"), this);
+  connect (graphicButton, &QPushButton::clicked, this, &MainWindow::onGraphic);
+  topLayout->addWidget(graphicButton);
 
   zoomInButton = new QPushButton(QString("Zoom In"), this);
   connect (zoomInButton, &QPushButton::clicked, this, &MainWindow::onZoomIn);
@@ -101,6 +101,11 @@ MainWindow::MainWindow(QWidget *parent) :
   fileMenu->addAction(basicThresholdAction);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAction);
+
+
+
+  // Graphic Window
+  graphicWindow = new GraphicWindow();
 
 
 
@@ -184,8 +189,9 @@ void MainWindow::setImageGray(const Mat &src)
   QRect r1(100, 200, 11, 16);
 }
 
-void MainWindow::onStop()
+void MainWindow::onGraphic()
 {
+  graphicWindow->show();
 }
 
 

@@ -24,6 +24,7 @@ class QTableWidget;
 class QGridLayout;
 class QScrollArea;
 class QScrollBar;
+class QSlider; 
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -44,9 +45,13 @@ private slots:
   void onZoomIn();
   void onZoomOut();
 
+  void basicThreshold();
+  void onSlider(int value);
+
 
 private:
   void setImage(const cv::Mat &src);
+  void setImageGray(const cv::Mat &src);
   void scaleImage();
 
   QPushButton *quitButton;
@@ -54,12 +59,25 @@ private:
   QPushButton *stopButton;
   QPushButton *zoomInButton;
   QPushButton *zoomOutButton;
+  QSlider *thresholdSlider;
+
+  QLabel *sliderLabel; 
+  
   QVBoxLayout *contentLayout;
   QImage image;
   QLabel *imageLabel;
   QScrollArea* scrollArea;
   double scaleFactor;
-  cv::Mat mat; 
+  cv::Mat mat;
+
+  // Menu Variables
+  QMenu *fileMenu;
+  QAction *exitAction;
+  QAction *basicThresholdAction;
+
+
+  int sliderValue; 
+  
 };
 
 #endif // MAINWINDOW_H

@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
   /* Content Layout */
   contentLayout = new QVBoxLayout(content);
   scaleFactor = 1;
-  imageLabel = new QLabel();
+  imageLabel = new QLabel(this);
   imageLabel->setBackgroundRole(QPalette::Base);
   imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
   imageLabel->setScaledContents(true);

@@ -10,7 +10,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
-using namespace cv; 
+using namespace cv;
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -18,17 +18,24 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   QWidget *root = new QWidget(this);
   QWidget *top = new QWidget(this);
+  QWidget *secondLine = new QWidget(this);
   QWidget *content = new QWidget(this);
 
   /* Top Layout */
   QHBoxLayout *topLayout = new QHBoxLayout(top);
   quitButton = new QPushButton(QString ("Quit"), this);
+  quitButton->setToolTip(QString("A tooltip"));
+  QFont font ("Courier");
+  quitButton->setFont(font);
+  QIcon icon("/home/p-hasan/work/qt/mrchester/my_icon.png");
+  quitButton->setIcon(icon);
   connect(quitButton, &QPushButton::clicked, qApp, &QApplication::quit);
   topLayout->addWidget(quitButton);
 
-  startButton = new QPushButton(QString("Start CV"), this);
-  connect (startButton, &QPushButton::clicked, this, &MainWindow::onStart);
-  topLayout->addWidget(startButton);
+  loadButton = new QPushButton(QString("Load Image"), this);
+  loadButton->setIcon(QIcon::fromTheme("face-smile"));
+  connect (loadButton, &QPushButton::clicked, this, &MainWindow::onLoad);
+  topLayout->addWidget(loadButton);
 
   thresholdSlider = new QSlider(Qt::Horizontal, this);
   thresholdSlider->setMinimum(0);
@@ -52,9 +59,16 @@ MainWindow::MainWindow(QWidget *parent) :
   connect (zoomOutButton, &QPushButton::clicked, this, &MainWindow::onZoomOut);
   topLayout->addWidget(zoomOutButton);
 
+  /* Second Layout */
+  QHBoxLayout *secondLayout = new QHBoxLayout(secondLine);
+  dimensionLabel = new QLabel(QString("No Image Loaded"), this);
+  secondLayout->addWidget(dimensionLabel);
+
+
+
   /* Content Layout */
   contentLayout = new QVBoxLayout(content);
-  scaleFactor = 1;  
+  scaleFactor = 1;
   imageLabel = new QLabel();
   imageLabel->setBackgroundRole(QPalette::Base);
   imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -63,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
   scrollArea = new QScrollArea;
   scrollArea->setBackgroundRole(QPalette::Dark);
   scrollArea->setWidget(imageLabel);
-  
+
 
   contentLayout->addWidget(scrollArea);
 
@@ -71,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
   /* Root Layout */
   QVBoxLayout *rootLayout = new QVBoxLayout(root);
   rootLayout->addWidget(top);
+  rootLayout->addWidget(secondLine);
   rootLayout->addWidget(content);
   setCentralWidget(root);
 
@@ -80,14 +95,14 @@ MainWindow::MainWindow(QWidget *parent) :
            qApp, &QApplication::quit);
 
   connect (basicThresholdAction, &QAction::triggered,
-           this, &MainWindow::basicThreshold); 
-  
+           this, &MainWindow::basicThreshold);
+
   fileMenu = menuBar()->addMenu(tr("&File"));
   fileMenu->addAction(basicThresholdAction);
   fileMenu->addSeparator();
   fileMenu->addAction(exitAction);
 
-  
+
 
   resize(QGuiApplication::primaryScreen()->availableSize() * 3 / 5);
 }
@@ -97,14 +112,20 @@ MainWindow::~MainWindow()
 
 }
 
-void MainWindow::onStart()
+void MainWindow::onLoad()
 {
 
+  Mat dest;
   // QDir::currentPath()
-    QString fileName = QFileDialog::getOpenFileName(this, "Open Input Image", "/data/aoe_images", "Images (*.jpg *.png *.bmp)");
-    if(QFile::exists(fileName))
+  QString fileName = QFileDialog::getOpenFileName(this, "Open Input Image", "/data/aoe_images", "Images (*.jpg *.png *.bmp)");
+  if(QFile::exists(fileName))
     {
       mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
+      dimensionLabel->setText(QString("Image Dimension,  Rows: %1 x Cols: %2").arg(mat.rows).arg(mat.cols));
+
+      cv::resize(mat,dest, Size(1280,720), 0, 0, INTER_AREA);
+      mat = dest;
+
       rectangle(mat, Point(0,0), Point(200, 300), Scalar(255,0,0), 2, LINE_8);
       setImage(mat);
 
@@ -121,9 +142,9 @@ void MainWindow::scaleImage()
 
   int dcols = round(mat.cols  * scaleFactor);
   int drows = round(mat.rows  * scaleFactor);
-    
+
   cv::resize(mat, dest, Size(dcols, drows), 0, 0, (scaleFactor < 1) ? INTER_AREA : INTER_LINEAR);
-  qDebug() << scaleFactor << ": " << dcols << "," << drows; 
+  qDebug() << scaleFactor << ": " << dcols << "," << drows;
   setImage(dest);
 }
 
@@ -137,7 +158,7 @@ void MainWindow::setImage(const Mat &src)
 
   image = newImage;
   QPixmap pix;
-  pix = QPixmap::fromImage(image); 
+  pix = QPixmap::fromImage(image);
   imageLabel->setPixmap(pix);
   imageLabel->adjustSize();
 
@@ -156,7 +177,7 @@ void MainWindow::setImageGray(const Mat &src)
 
   image = newImage;
   QPixmap pix;
-  pix = QPixmap::fromImage(image); 
+  pix = QPixmap::fromImage(image);
   imageLabel->setPixmap(pix);
   imageLabel->adjustSize();
 
@@ -183,11 +204,11 @@ void MainWindow::onZoomOut()
 
 void MainWindow::on_inputPushButton_pressed()
 {
-  // 
+  //
     QString fileName = QFileDialog::getOpenFileName(this, "Open Input Image", "/data/aoe_images", "Images (*.jpg *.png *.bmp)");
     if(QFile::exists(fileName))
     {
-      
+
     }
 }
 
@@ -213,10 +234,10 @@ void MainWindow::basicThreshold()
   threshold(gray, dst, threshold_value, max_binary_value, threshold_type);
 
   setImageGray(dst);
-} 
+}
 
 
 void MainWindow::onSlider(int value) {
   sliderLabel->setText(QString("Slider Value: %1").arg(value));
-  sliderValue = value; 
+  sliderValue = value;
 }

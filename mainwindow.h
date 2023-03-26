@@ -39,7 +39,7 @@ protected:
 
 private slots:
     void on_inputPushButton_pressed();
-    void onStart();
+    void onLoad();
     void onStop();
     void on_outputPushButton_pressed();
   void onZoomIn();
@@ -55,13 +55,14 @@ private:
   void scaleImage();
 
   QPushButton *quitButton;
-  QPushButton *startButton;
+  QPushButton *loadButton;
   QPushButton *stopButton;
   QPushButton *zoomInButton;
   QPushButton *zoomOutButton;
   QSlider *thresholdSlider;
 
-  QLabel *sliderLabel; 
+  QLabel *sliderLabel;
+  QLabel *dimensionLabel; 
   
   QVBoxLayout *contentLayout;
   QImage image;

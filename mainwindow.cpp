@@ -123,7 +123,7 @@ void MainWindow::onLoad()
       mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
       dimensionLabel->setText(QString("Image Dimension,  Rows: %1 x Cols: %2").arg(mat.rows).arg(mat.cols));
 
-      cv::resize(mat,dest, Size(1280,720), 0, 0, INTER_AREA);
+      cv::resize(mat,dest, Size(1920,1080), 0, 0, INTER_AREA);
       mat = dest;
 
       rectangle(mat, Point(0,0), Point(200, 300), Scalar(255,0,0), 2, LINE_8);

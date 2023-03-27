@@ -108,6 +108,10 @@ MainWindow::MainWindow(QWidget *parent) :
   graphicWindow = new GraphicWindow();
 
 
+  // Dialog
+  dialog = new Dialog(this);
+
+
 
   resize(QGuiApplication::primaryScreen()->availableSize() * 3 / 5);
 }
@@ -191,7 +195,8 @@ void MainWindow::setImageGray(const Mat &src)
 
 void MainWindow::onGraphic()
 {
-  graphicWindow->show();
+  // graphicWindow->show();
+  dialog->show();
 }
 
 

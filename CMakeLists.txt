@@ -22,6 +22,7 @@ add_executable(MrChester
         DrawableImage.cpp
         graphicwindow.cpp
         layoutitem.cpp
+        dialog.cpp
 )
 
 target_include_directories(MrChester PUBLIC

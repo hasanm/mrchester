@@ -14,6 +14,7 @@ DrawableImage::DrawableImage(QWidget* parent)
 
 DrawableImage::~DrawableImage()
 {
+  
 } 
 
 

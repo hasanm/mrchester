@@ -12,6 +12,7 @@
 
 #include <opencv2/opencv.hpp>
 #include "graphicwindow.h"
+#include "dialog.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -77,7 +78,8 @@ private:
   QAction *exitAction;
   QAction *basicThresholdAction;
 
-  GraphicWindow *graphicWindow; 
+  GraphicWindow *graphicWindow;
+  Dialog *dialog; 
 
 
   int sliderValue; 

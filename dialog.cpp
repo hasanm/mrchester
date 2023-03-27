@@ -1,7 +1,10 @@
 #include "dialog.h"
 #include <QStackedLayout>
 #include <QGraphicsLinearLayout>
-#include <QVBoxLayout> 
+#include <QVBoxLayout>
+#include <QtWidgets>
+
+using namespace cv; 
 
 Dialog::Dialog(QWidget *parent) :
   QDialog(parent)
@@ -29,9 +32,28 @@ Dialog::Dialog(QWidget *parent) :
   layout->addWidget(view);
 
   this->setLayout(layout);
+
 }
 
 
 Dialog::~Dialog()
 {
+} 
+
+
+void Dialog::setMatrix(Mat in)
+{
+  mat = in;
+  Mat dest;
+  cvtColor(mat,dest, COLOR_BGR2RGB);
+  const QImage image((uchar *) dest.data, dest.cols, dest.rows, dest.step, QImage::Format_RGB888);
+
+  QPixmap pix = QPixmap::fromImage(image);
+  pixmap = scene->addPixmap(pix); 
+} 
+
+
+void Dialog::mousePressEvent(QMouseEvent* event)
+{
+  qDebug() << "Mouse Event"; 
 } 

@@ -138,6 +138,8 @@ void MainWindow::onLoad()
       rectangle(mat, Point(0,0), Point(200, 300), Scalar(255,0,0), 2, LINE_8);
       setImage(mat);
 
+      dialog->setMatrix(mat);
+
       const QString message = tr("Opened \"%1\", %2x%3, Depth: %4")
         .arg(QDir::toNativeSeparators(fileName)).arg(image.width()).arg(image.height()).arg(image.depth());
       statusBar()->showMessage(message);
@@ -196,6 +198,7 @@ void MainWindow::setImageGray(const Mat &src)
 void MainWindow::onGraphic()
 {
   // graphicWindow->show();
+  
   dialog->show();
 }
 

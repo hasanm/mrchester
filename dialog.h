@@ -4,7 +4,15 @@
 #include <QDialog>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QGraphicsItem> 
+#include <QGraphicsItem>
+#include <QMouseEvent>
+
+
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
+using namespace std; 
 
 class Dialog : public QDialog
 {
@@ -15,12 +23,23 @@ class Dialog : public QDialog
   explicit Dialog(QWidget *parent = 0);
   ~Dialog();
 
+  void setMatrix(cv::Mat in);
+
+
+ private:
   QGraphicsView *view; 
 
   QGraphicsScene *scene;
   QGraphicsEllipseItem *ellipse;
   QGraphicsRectItem *rectangle;
-  QGraphicsTextItem *text; 
+  QGraphicsTextItem *text;
+  QGraphicsPixmapItem *pixmap; 
+
+  cv::Mat mat;
+
+protected:
+  void mousePressEvent(QMouseEvent* event) override;
+
 }; 
 
 #endif 

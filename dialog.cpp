@@ -55,5 +55,11 @@ void Dialog::setMatrix(Mat in)
 
 void Dialog::mousePressEvent(QMouseEvent* event)
 {
-  qDebug() << "Mouse Event"; 
+  qDebug() << "Mouse Pressed"; 
+}
+
+
+void Dialog::mouseReleaseEvent(QMouseEvent* event)
+{
+  qDebug() << "Mouse Released"; 
 } 

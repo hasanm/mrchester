@@ -39,6 +39,7 @@ class Dialog : public QDialog
 
 protected:
   void mousePressEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;  
 
 }; 
 

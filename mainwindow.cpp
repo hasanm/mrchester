@@ -47,6 +47,10 @@ MainWindow::MainWindow(QWidget *parent) :
   sliderLabel = new QLabel(QString("Slider Value : "), this);
   topLayout->addWidget(sliderLabel);
 
+  thresholdButton = new QPushButton(QString("Apply Threshold"), this);
+  connect(thresholdButton, &QPushButton::clicked, this, &MainWindow::basicThreshold);
+  topLayout->addWidget(thresholdButton);
+
   graphicButton = new QPushButton(QString("Open Graphics Scene"), this);
   connect (graphicButton, &QPushButton::clicked, this, &MainWindow::onGraphic);
   topLayout->addWidget(graphicButton);

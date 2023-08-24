@@ -61,6 +61,7 @@ private:
   QPushButton *graphicButton;
   QPushButton *zoomInButton;
   QPushButton *zoomOutButton;
+  QPushButton *thresholdButton;
   QSlider *thresholdSlider;
 
   QLabel *sliderLabel;

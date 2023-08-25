@@ -259,3 +259,40 @@ void MainWindow::onSlider(int value) {
   sliderLabel->setText(QString("Slider Value: %1").arg(value));
   sliderValue = value;
 }
+
+
+
+
+
+void MainWindow::defaultLoad()
+{
+
+  Mat dest;
+  // QDir::currentPath()
+  QString fileName = QString("/data/test_images/01.png");
+  if(QFile::exists(fileName))
+    {
+      mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
+      dimensionLabel->setText(QString("Image Dimension,  Rows: %1 x Cols: %2").arg(mat.rows).arg(mat.cols));
+
+      cv::resize(mat,dest, Size(1920,1080), 0, 0, INTER_AREA);
+      mat = dest;
+
+      Scalar color[3] = {Scalar(255,0,0), Scalar(0,255,0), Scalar(0,0,255)};
+
+      for (int i = 0; i < 5; i++) {
+          int x = i * 100 + 10 ;
+          rectangle(mat, Point(x,0), Point(x + 100,50), color[i%3], 2, LINE_8);
+      // rectangle(mat, Point(x,0), Point(x + 110, 50), Scalar(255,0,0), 2, LINE_8);
+      }
+
+
+      setImage(mat);
+
+      dialog->setMatrix(mat);
+
+      const QString message = tr("Opened \"%1\", %2x%3, Depth: %4")
+        .arg(QDir::toNativeSeparators(fileName)).arg(image.width()).arg(image.height()).arg(image.depth());
+      statusBar()->showMessage(message);
+    }
+}

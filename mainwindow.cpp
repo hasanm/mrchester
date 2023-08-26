@@ -202,7 +202,7 @@ void MainWindow::setImageGray(const Mat &src)
 void MainWindow::onGraphic()
 {
   // graphicWindow->show();
-  
+
   dialog->show();
 }
 
@@ -284,9 +284,24 @@ void MainWindow::defaultLoad()
       Scalar color[3] = {Scalar(255,0,0), Scalar(0,255,0), Scalar(0,0,255)};
 
       for (int i = 0; i < 5; i++) {
-          int x = i * 100 + 10 ;
-          rectangle(mat, Point(x,0), Point(x + 100,50), color[i%3], 2, LINE_8);
-          Mat clipped (mat, Rect(x,0,x+100, 50));
+          int x1 = i * 100 + 10 ;
+          int y1 = 0;
+          int x2 = x1 + 100;
+          int y2 = 50;
+          rectangle(mat, Point(x1,y1), Point(x2,y2), color[i%3], 2, LINE_8);
+
+          int x3 = x1 + 40;
+          int y3 = y1 + 10;
+          rectangle(mat, Point(x3,y3), Point(x2,y2), color[(i+1)%3], 2, LINE_8);
+
+
+          int x4 = x1 + 10;
+          int y4 = y1 + 28;
+          int x5 = x4 + 28;
+          int y5 = y4 + 22;
+          rectangle(mat, Point(x4,y4), Point(x5,y5), color[(i+2)%3], 2, LINE_8);
+
+          Mat clipped (mat, Rect(x1,y1,x2, y2));
           if (i == 0) {
               cvtColor(clipped, gray, COLOR_BGR2GRAY);
               threshold(gray, tmp, 150, 255, cv::THRESH_BINARY_INV);

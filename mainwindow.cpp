@@ -268,6 +268,9 @@ void MainWindow::defaultLoad()
 {
 
   Mat dest;
+  Mat gray;
+
+  Mat tmp, tmp1;
   // QDir::currentPath()
   QString fileName = QString("/data/test_images/01.png");
   if(QFile::exists(fileName))
@@ -283,6 +286,13 @@ void MainWindow::defaultLoad()
       for (int i = 0; i < 5; i++) {
           int x = i * 100 + 10 ;
           rectangle(mat, Point(x,0), Point(x + 100,50), color[i%3], 2, LINE_8);
+          Mat clipped (mat, Rect(x,0,x+100, 50));
+          if (i == 0) {
+              cvtColor(clipped, gray, COLOR_BGR2GRAY);
+              threshold(gray, tmp, 150, 255, 3);
+              // cv::resize(tmp,tmp1, Size(1920,1080), 0, 0, INTER_AREA);
+              imwrite("out.png", tmp);
+          }
       // rectangle(mat, Point(x,0), Point(x + 110, 50), Scalar(255,0,0), 2, LINE_8);
       }
 

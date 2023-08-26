@@ -289,7 +289,7 @@ void MainWindow::defaultLoad()
           Mat clipped (mat, Rect(x,0,x+100, 50));
           if (i == 0) {
               cvtColor(clipped, gray, COLOR_BGR2GRAY);
-              threshold(gray, tmp, 150, 255, 3);
+              threshold(gray, tmp, 150, 255, cv::THRESH_BINARY_INV);
               // cv::resize(tmp,tmp1, Size(1920,1080), 0, 0, INTER_AREA);
               imwrite("out.png", tmp);
           }

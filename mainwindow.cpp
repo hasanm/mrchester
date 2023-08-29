@@ -109,7 +109,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
   // Graphic Window
-  graphicWindow = new GraphicWindow();
+  // graphicWindow = new GraphicWindow();
 
 
   // Dialog

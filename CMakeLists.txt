@@ -23,6 +23,7 @@ add_executable(MrChester
         graphicwindow.cpp
         layoutitem.cpp
         dialog.cpp
+        MyGraphicsView.cpp
 )
 
 target_include_directories(MrChester PUBLIC

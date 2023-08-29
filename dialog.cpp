@@ -3,8 +3,9 @@
 #include <QGraphicsLinearLayout>
 #include <QVBoxLayout>
 #include <QtWidgets>
+#include "MyGraphicsView.h"
 
-using namespace cv; 
+using namespace cv;
 
 Dialog::Dialog(QWidget *parent) :
   QDialog(parent)
@@ -20,14 +21,14 @@ Dialog::Dialog(QWidget *parent) :
   QPen outlinePen(Qt::black);
   outlinePen.setWidth(2);
 
-  rectangle = scene->addRect(100, 0, 80, 100, outlinePen, blueBrush);
-  ellipse = scene->addEllipse(0, -100, 300, 60, outlinePen, greenBrush);
-  text = scene->addText("bogotobogo.com", QFont("Arial", 20));
+  // rectangle = scene->addRect(100, 0, 80, 100, outlinePen, blueBrush);
+  // ellipse = scene->addEllipse(0, -100, 300, 60, outlinePen, greenBrush);
+  // text = scene->addText("bogotobogo.com", QFont("Arial", 20));
 
-  text->setFlag(QGraphicsItem::ItemIsMovable);
+  // text->setFlag(QGraphicsItem::ItemIsMovable);
 
 
-  view = new QGraphicsView();
+  view = new MyGraphicsView();
   view->setScene(scene);
   layout->addWidget(view);
 
@@ -38,7 +39,7 @@ Dialog::Dialog(QWidget *parent) :
 
 Dialog::~Dialog()
 {
-} 
+}
 
 
 void Dialog::setMatrix(Mat in)
@@ -49,17 +50,17 @@ void Dialog::setMatrix(Mat in)
   const QImage image((uchar *) dest.data, dest.cols, dest.rows, dest.step, QImage::Format_RGB888);
 
   QPixmap pix = QPixmap::fromImage(image);
-  pixmap = scene->addPixmap(pix); 
-} 
+  pixmap = scene->addPixmap(pix);
+}
 
 
 void Dialog::mousePressEvent(QMouseEvent* event)
 {
-  qDebug() << "Mouse Pressed"; 
+    qDebug() << "D Mouse Pressed " << event->pos();
 }
 
 
 void Dialog::mouseReleaseEvent(QMouseEvent* event)
 {
-  qDebug() << "Mouse Released"; 
-} 
+    qDebug() << "D Mouse Released " << event->pos();
+}

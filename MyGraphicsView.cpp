@@ -21,11 +21,12 @@ void MyGraphicsView::mousePressEvent(QMouseEvent* event)
 void MyGraphicsView::mouseReleaseEvent(QMouseEvent* event)
 {
     // qDebug() << "GV Mouse Released " << event->pos();
-    // diloag->mousePressEvent(event);
+    parent->onMouseReleased(event);
 }
 
 
 void MyGraphicsView::mouseMoveEvent(QMouseEvent* event)
 {
     // qDebug() << "GV Moved " << event->pos();
+    parent->onMouseMoved(event);
 }

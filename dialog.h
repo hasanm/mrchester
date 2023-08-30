@@ -26,6 +26,8 @@ class Dialog : public QDialog
 
     void setMatrix(cv::Mat in);
     void onMousePressed(QMouseEvent* event);
+    void onMouseReleased(QMouseEvent* event);
+    void onMouseMoved(QMouseEvent* event);    
 
  private:
     QGraphicsView *view; 
@@ -38,8 +40,8 @@ class Dialog : public QDialog
 
     cv::Mat mat;
 
-    QPoint top;
-    QPoint bottom;
+    QPointF top;
+    QPointF bottom;
     int active;
     // QBrush greenBrush(Qt::green);
     QBrush blueBrush;

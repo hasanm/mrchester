@@ -16,7 +16,6 @@ Dialog::Dialog(QWidget *parent) :
   QVBoxLayout *layout = new QVBoxLayout(this);
 
   scene = new QGraphicsScene(this);
-  // 
 
   // rectangle = scene->addRect(100, 0, 80, 100, outlinePen, blueBrush);
   // ellipse = scene->addEllipse(0, -100, 300, 60, outlinePen, greenBrush);
@@ -28,6 +27,7 @@ Dialog::Dialog(QWidget *parent) :
   view = new MyGraphicsView(this);
   view->setMouseTracking(true);
   view->setScene(scene);
+  view->scale(.2,.2);
   layout->addWidget(view);
 
 
@@ -65,12 +65,26 @@ void Dialog::onMousePressed(QMouseEvent* event)
 {
     qDebug() << "D Mouse Pressed " << event->pos();
     active = 1;
-    top = event->pos();
+    top = view->mapToScene(event->pos());
     bottom = top + QPoint (100, 100);
     outlinePen.setWidth(2);
     rectangle = new QGraphicsRectItem(QRectF(top, bottom));
     scene->addItem(rectangle);
 }
 
+void Dialog::onMouseReleased(QMouseEvent* event)
+{
+    qDebug() << "D Mouse Pressed " << event->pos();
+    active = 0;
+}
 
+void Dialog::onMouseMoved(QMouseEvent* event)
+{
 
+    if (active == 1) {
+        scene->removeItem(rectangle);
+        bottom = view->mapToScene(event->pos());
+        rectangle = new QGraphicsRectItem(QRectF(top, bottom));
+        scene->addItem(rectangle);
+    } 
+}

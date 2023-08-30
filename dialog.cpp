@@ -29,6 +29,7 @@ Dialog::Dialog(QWidget *parent) :
 
 
   view = new MyGraphicsView();
+  view->setMouseTracking(true);
   view->setScene(scene);
   layout->addWidget(view);
 

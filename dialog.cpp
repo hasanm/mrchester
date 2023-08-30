@@ -8,18 +8,15 @@
 using namespace cv;
 
 Dialog::Dialog(QWidget *parent) :
-  QDialog(parent)
+    QDialog(parent),
+    outlinePen(Qt::black),
+    blueBrush(Qt::blue)
 {
 
   QVBoxLayout *layout = new QVBoxLayout(this);
 
   scene = new QGraphicsScene(this);
-
-
-  QBrush greenBrush(Qt::green);
-  QBrush blueBrush(Qt::blue);
-  QPen outlinePen(Qt::black);
-  outlinePen.setWidth(2);
+  // 
 
   // rectangle = scene->addRect(100, 0, 80, 100, outlinePen, blueBrush);
   // ellipse = scene->addEllipse(0, -100, 300, 60, outlinePen, greenBrush);
@@ -28,13 +25,22 @@ Dialog::Dialog(QWidget *parent) :
   // text->setFlag(QGraphicsItem::ItemIsMovable);
 
 
-  view = new MyGraphicsView();
+  view = new MyGraphicsView(this);
   view->setMouseTracking(true);
   view->setScene(scene);
   layout->addWidget(view);
 
+
+  QString fileName = QString("/data/homeworks/test_data/1.JPG");
+  Mat mat;
+  if (QFile::exists(fileName)) {
+      mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
+      this->setMatrix(mat);
+  }
+
   this->setLayout(layout);
 
+  active = 0; 
 }
 
 
@@ -55,13 +61,16 @@ void Dialog::setMatrix(Mat in)
 }
 
 
-void Dialog::mousePressEvent(QMouseEvent* event)
+void Dialog::onMousePressed(QMouseEvent* event)
 {
     qDebug() << "D Mouse Pressed " << event->pos();
+    active = 1;
+    top = event->pos();
+    bottom = top + QPoint (100, 100);
+    outlinePen.setWidth(2);
+    rectangle = new QGraphicsRectItem(QRectF(top, bottom));
+    scene->addItem(rectangle);
 }
 
 
-void Dialog::mouseReleaseEvent(QMouseEvent* event)
-{
-    qDebug() << "D Mouse Released " << event->pos();
-}
+

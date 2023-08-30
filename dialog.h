@@ -6,6 +6,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 #include <QMouseEvent>
+#include <QtWidgets>
 
 
 #include <opencv2/opencv.hpp>
@@ -20,26 +21,30 @@ class Dialog : public QDialog
 
 
  public:
-  explicit Dialog(QWidget *parent = 0);
-  ~Dialog();
+    explicit Dialog(QWidget *parent = 0);
+    ~Dialog();
 
-  void setMatrix(cv::Mat in);
-
+    void setMatrix(cv::Mat in);
+    void onMousePressed(QMouseEvent* event);
 
  private:
-  QGraphicsView *view; 
+    QGraphicsView *view; 
 
-  QGraphicsScene *scene;
-  QGraphicsEllipseItem *ellipse;
-  QGraphicsRectItem *rectangle;
-  QGraphicsTextItem *text;
-  QGraphicsPixmapItem *pixmap; 
+    QGraphicsScene *scene;
+    QGraphicsEllipseItem *ellipse;
+    QGraphicsRectItem *rectangle;
+    QGraphicsTextItem *text;
+    QGraphicsPixmapItem *pixmap; 
 
-  cv::Mat mat;
+    cv::Mat mat;
 
-protected:
-  void mousePressEvent(QMouseEvent* event) override;
-  void mouseReleaseEvent(QMouseEvent* event) override;  
+    QPoint top;
+    QPoint bottom;
+    int active;
+    // QBrush greenBrush(Qt::green);
+    QBrush blueBrush;
+    QPen outlinePen;
+
 
 }; 
 

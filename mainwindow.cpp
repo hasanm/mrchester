@@ -340,7 +340,7 @@ void MainWindow::defaultLoad()
 
       setImage(mat);
 
-      dialog->setMatrix(mat);
+      // dialog->setMatrix(mat);
 
       const QString message = tr("Opened \"%1\", %2x%3, Depth: %4")
         .arg(QDir::toNativeSeparators(fileName)).arg(image.width()).arg(image.height()).arg(image.depth());

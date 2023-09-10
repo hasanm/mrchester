@@ -22,7 +22,6 @@ add_executable(MrChester
         DrawableImage.cpp
         graphicwindow.cpp
         layoutitem.cpp
-        dialog.cpp
         MyGraphicsView.cpp
 )
 

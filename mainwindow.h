@@ -10,9 +10,14 @@
 #include <QSettings>
 #include <QImage>
 
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsItem>
+#include <QColor>
+
 #include <opencv2/opencv.hpp>
 #include "graphicwindow.h"
-#include "dialog.h"
+#include "MyGraphicsView.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -26,8 +31,10 @@ class QTableWidget;
 class QGridLayout;
 class QScrollArea;
 class QScrollBar;
-class QSlider; 
+class QSlider;
 QT_END_NAMESPACE
+
+class MyGraphicsView;
 
 class MainWindow : public QMainWindow
 {
@@ -37,6 +44,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void defaultLoad();
+    void onMousePressed(QMouseEvent* event);
+    void onMouseReleased(QMouseEvent* event);
+    void onMouseMoved(QMouseEvent* event);
 
 protected:
 
@@ -66,8 +76,8 @@ private:
   QSlider *thresholdSlider;
 
   QLabel *sliderLabel;
-  QLabel *dimensionLabel; 
-  
+  QLabel *dimensionLabel;
+
   QVBoxLayout *contentLayout;
   QImage image;
   QLabel *imageLabel;
@@ -81,11 +91,22 @@ private:
   QAction *basicThresholdAction;
 
   GraphicWindow *graphicWindow;
-  Dialog *dialog; 
 
 
-  int sliderValue; 
-  
+  int sliderValue;
+
+    MyGraphicsView *view;
+    QGraphicsScene *scene;
+    QGraphicsPixmapItem *pixmap;
+    QGraphicsRectItem *rectangle;
+    QPointF top_p;
+    QPointF bottom_p;
+    int active;
+    // QBrush greenBrush(Qt::green);
+    // QBrush redBrush(Qt::red);
+    QBrush blueBrush;
+    QPen outlinePen;
+
 };
 
 #endif // MAINWINDOW_H

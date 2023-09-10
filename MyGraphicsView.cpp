@@ -1,9 +1,9 @@
 #include <QtWidgets>
 #include "MyGraphicsView.h"
 
-MyGraphicsView::MyGraphicsView(Dialog *dialog)
+MyGraphicsView::MyGraphicsView(MainWindow *window)
 {
-    parent = dialog; 
+    parent = window;
 }
 
 void MyGraphicsView::mouseDoubleClickEvent(QMouseEvent *event)

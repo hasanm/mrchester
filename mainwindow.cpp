@@ -14,7 +14,9 @@ using namespace cv;
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
-  sliderValue(50)
+  sliderValue(50),
+  pixmap (nullptr),
+  rectangle(nullptr)
 {
   QWidget *root = new QWidget(this);
   QWidget *top = new QWidget(this);
@@ -78,12 +80,19 @@ MainWindow::MainWindow(QWidget *parent) :
   imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
   imageLabel->setScaledContents(true);
 
+
   scrollArea = new QScrollArea;
   scrollArea->setBackgroundRole(QPalette::Dark);
   scrollArea->setWidget(imageLabel);
 
+  scene = new QGraphicsScene(this);
+  view  = new MyGraphicsView(this);
+  view->setMouseTracking(true);
+  view->setScene(scene);
+  // view->scale(.2,.2);
 
-  contentLayout->addWidget(scrollArea);
+  // contentLayout->addWidget(scrollArea);
+  contentLayout->addWidget(view);
 
 
   /* Root Layout */
@@ -112,11 +121,6 @@ MainWindow::MainWindow(QWidget *parent) :
   // graphicWindow = new GraphicWindow();
 
 
-  // Dialog
-  dialog = new Dialog(this);
-
-
-
   resize(QGuiApplication::primaryScreen()->availableSize() * 3 / 5);
 }
 
@@ -128,7 +132,6 @@ MainWindow::~MainWindow()
 void MainWindow::onLoad()
 {
 
-  Mat dest;
   // QDir::currentPath()
   QString fileName = QFileDialog::getOpenFileName(this, "Open Input Image", "/data/aoe_images", "Images (*.jpg *.png *.bmp)");
   if(QFile::exists(fileName))
@@ -136,13 +139,9 @@ void MainWindow::onLoad()
       mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
       dimensionLabel->setText(QString("Image Dimension,  Rows: %1 x Cols: %2").arg(mat.rows).arg(mat.cols));
 
-      cv::resize(mat,dest, Size(1920,1080), 0, 0, INTER_AREA);
-      mat = dest;
-
-      rectangle(mat, Point(0,0), Point(200, 300), Scalar(255,0,0), 2, LINE_8);
+      cv::rectangle(mat, Point(0,0), Point(200, 300), Scalar(255,0,0), 2, LINE_8);
       setImage(mat);
 
-      dialog->setMatrix(mat);
 
       const QString message = tr("Opened \"%1\", %2x%3, Depth: %4")
         .arg(QDir::toNativeSeparators(fileName)).arg(image.width()).arg(image.height()).arg(image.depth());
@@ -169,15 +168,11 @@ void MainWindow::setImage(const Mat &src)
   Mat dest;
   cvtColor(src, dest,COLOR_BGR2RGB);
   const QImage newImage((uchar*) dest.data, dest.cols, dest.rows, dest.step, QImage::Format_RGB888);
-  // const QImage newImage(dest.data, dest.cols, dest.rows, QImage::Format_RGB888);
-
-  image = newImage;
-  QPixmap pix;
-  pix = QPixmap::fromImage(image);
-  imageLabel->setPixmap(pix);
-  imageLabel->adjustSize();
-
-  QRect r1(100, 200, 11, 16);
+  QPixmap pix = QPixmap::fromImage(newImage);
+  if (pixmap != nullptr) {
+      scene->removeItem(pixmap);
+  }
+  pixmap = scene->addPixmap(pix);
 }
 
 
@@ -203,7 +198,6 @@ void MainWindow::onGraphic()
 {
   // graphicWindow->show();
 
-  dialog->show();
 }
 
 
@@ -266,48 +260,37 @@ void MainWindow::onSlider(int value) {
 
 void MainWindow::defaultLoad()
 {
-
-  Mat dest;
-  Mat gray;
-
-  Mat tmp, tmp1;
-  // QDir::currentPath()
   QString fileName = QString("/data/test_images/01.png");
   if(QFile::exists(fileName))
     {
       mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
       dimensionLabel->setText(QString("Image Dimension,  Rows: %1 x Cols: %2").arg(mat.rows).arg(mat.cols));
 
-      // cv::resize(mat,dest, Size(1920,1080), 0, 0, INTER_AREA);
-      // mat = dest;
-
-      Scalar color[3] = {Scalar(255,0,0), Scalar(0,255,0), Scalar(0,0,255)};
-
-      for (int i = 0; i < 256; i++) {
-          int x1, y1, x2, y2;
-          x1 = i * 10;
-          y1 = 0;
-
-          x2 = x1;
-          y2 = 600;
-
-
-          if (i%10 == 0) {
-              line(mat, Point(x1,y1), Point(x2,y2), Scalar(255,0,0), 1, LINE_8);
-          } else if (i%5 == 0) {
-              line(mat, Point(x1,y1), Point(x2,y2), Scalar(100,100,0), 1, LINE_8);
-          } else {
-              line(mat, Point(x1,y1), Point(x2,y2), Scalar(0,0,0), 1, LINE_8);
-          }
-
-
-      }
-
-      rectangle(mat, Point(65,0) , Point(145,65), color[0], 2, LINE_8);
-      rectangle(mat, Point(200,0), Point(280,65), color[0], 2, LINE_8);
-      rectangle(mat, Point(330,0), Point(410,65), color[0], 2, LINE_8);
-      rectangle(mat, Point(465,0), Point(545,65), color[0], 2, LINE_8);
-      rectangle(mat, Point(600,0), Point(700,65), color[0], 2, LINE_8);
+      // Scalar color[3] = {Scalar(255,0,0), Scalar(0,255,0), Scalar(0,0,255)};
+      //
+      // for (int i = 0; i < 256; i++) {
+      //     int x1, y1, x2, y2;
+      //     x1 = i * 10;
+      //     y1 = 0;
+      //
+      //     x2 = x1;
+      //     y2 = 600;
+      //
+      //
+      //     if (i%10 == 0) {
+      //         line(mat, Point(x1,y1), Point(x2,y2), Scalar(255,0,0), 1, LINE_8);
+      //     } else if (i%5 == 0) {
+      //         line(mat, Point(x1,y1), Point(x2,y2), Scalar(100,100,0), 1, LINE_8);
+      //     } else {
+      //         line(mat, Point(x1,y1), Point(x2,y2), Scalar(0,0,0), 1, LINE_8);
+      //     }
+      // }
+      //
+      // cv::rectangle(mat, Point(65,0) , Point(145,65), color[0], 2, LINE_8);
+      // cv::rectangle(mat, Point(200,0), Point(280,65), color[0], 2, LINE_8);
+      // cv::rectangle(mat, Point(330,0), Point(410,65), color[0], 2, LINE_8);
+      // cv::rectangle(mat, Point(465,0), Point(545,65), color[0], 2, LINE_8);
+      // cv::rectangle(mat, Point(600,0), Point(700,65), color[0], 2, LINE_8);
 
       // for (int i = 0; i < 5; i++) {
       //     int x1 = i * 130 + 10;
@@ -340,10 +323,43 @@ void MainWindow::defaultLoad()
 
       setImage(mat);
 
-      // dialog->setMatrix(mat);
-
       const QString message = tr("Opened \"%1\", %2x%3, Depth: %4")
         .arg(QDir::toNativeSeparators(fileName)).arg(image.width()).arg(image.height()).arg(image.depth());
       statusBar()->showMessage(message);
+    }
+}
+
+
+
+void MainWindow::onMousePressed(QMouseEvent* event)
+{
+    qDebug() << "D Mouse Pressed " << event->pos();
+    active = 1;
+    top_p = view->mapToScene(event->pos());
+    bottom_p = top_p + QPoint (100, 100);
+    outlinePen.setWidth(2);
+    if (rectangle != nullptr) {
+        scene->removeItem(rectangle);
+    }
+    rectangle = new QGraphicsRectItem(QRectF(top_p, bottom_p));
+    scene->addItem(rectangle);
+}
+
+void MainWindow::onMouseReleased(QMouseEvent* event)
+{
+    qDebug() << "D Mouse Pressed " << event->pos();
+    active = 0;
+}
+
+void MainWindow::onMouseMoved(QMouseEvent* event)
+{
+
+    if (active == 1) {
+        if (rectangle != nullptr) {
+            scene->removeItem(rectangle);
+        }
+        bottom_p = view->mapToScene(event->pos());
+        rectangle = new QGraphicsRectItem(QRectF(top_p, bottom_p));
+        scene->addItem(rectangle);
     }
 }

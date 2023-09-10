@@ -2,14 +2,16 @@
 #define MYGRAPHICSVIEW_H
 
 #include <QtWidgets>
-#include "dialog.h"
+#include "mainwindow.h"
+
+class MainWindow;
 
 class MyGraphicsView : public QGraphicsView
 {
     Q_OBJECT
 
 private :
-    Dialog *parent; 
+    MainWindow *parent;
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -18,7 +20,7 @@ protected:
     void mouseMoveEvent(QMouseEvent* event) override;
 
 public:
-    MyGraphicsView(Dialog *dialog);
+    MyGraphicsView(MainWindow *window);
 };
 
 

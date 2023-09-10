@@ -74,24 +74,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
   /* Content Layout */
   contentLayout = new QVBoxLayout(content);
-  scaleFactor = 1;
-  imageLabel = new QLabel(this);
-  imageLabel->setBackgroundRole(QPalette::Base);
-  imageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-  imageLabel->setScaledContents(true);
-
-
-  scrollArea = new QScrollArea;
-  scrollArea->setBackgroundRole(QPalette::Dark);
-  scrollArea->setWidget(imageLabel);
-
   scene = new QGraphicsScene(this);
   view  = new MyGraphicsView(this);
   view->setMouseTracking(true);
   view->setScene(scene);
   // view->scale(.2,.2);
 
-  // contentLayout->addWidget(scrollArea);
   contentLayout->addWidget(view);
 
 
@@ -152,14 +140,7 @@ void MainWindow::onLoad()
 
 void MainWindow::scaleImage()
 {
-  Mat dest;
-
-  int dcols = round(mat.cols  * scaleFactor);
-  int drows = round(mat.rows  * scaleFactor);
-
-  cv::resize(mat, dest, Size(dcols, drows), 0, 0, (scaleFactor < 1) ? INTER_AREA : INTER_LINEAR);
-  qDebug() << scaleFactor << ": " << dcols << "," << drows;
-  setImage(dest);
+    
 }
 
 void MainWindow::setImage(const Mat &src)
@@ -186,32 +167,24 @@ void MainWindow::setImageGray(const Mat &src)
   // const QImage newImage(dest.data, dest.cols, dest.rows, QImage::Format_RGB888);
 
   image = newImage;
-  QPixmap pix;
-  pix = QPixmap::fromImage(image);
-  imageLabel->setPixmap(pix);
-  imageLabel->adjustSize();
-
-  QRect r1(100, 200, 11, 16);
+  QPixmap pix = QPixmap::fromImage(image);
 }
 
 void MainWindow::onGraphic()
 {
-  // graphicWindow->show();
 
 }
 
 
 void MainWindow::onZoomIn()
 {
-  scaleFactor += 0.05;
-  scaleImage();
+
 }
 
 
 void MainWindow::onZoomOut()
 {
-  scaleFactor -= 0.05;
-  scaleImage();
+
 }
 
 void MainWindow::on_inputPushButton_pressed()

@@ -55,45 +55,42 @@ private slots:
     void onLoad();
     void onGraphic();
     void on_outputPushButton_pressed();
-  void onZoomIn();
-  void onZoomOut();
+    void onZoomIn();
+    void onZoomOut();
 
-  void basicThreshold();
-  void onSlider(int value);
+    void basicThreshold();
+    void onSlider(int value);
 
 
 private:
-  void setImage(const cv::Mat &src);
-  void setImageGray(const cv::Mat &src);
-  void scaleImage();
+    void setImage(const cv::Mat &src);
+    void setImageGray(const cv::Mat &src);
+    void scaleImage();
 
-  QPushButton *quitButton;
-  QPushButton *loadButton;
-  QPushButton *graphicButton;
-  QPushButton *zoomInButton;
-  QPushButton *zoomOutButton;
-  QPushButton *thresholdButton;
-  QSlider *thresholdSlider;
+    QPushButton *quitButton;
+    QPushButton *loadButton;
+    QPushButton *graphicButton;
+    QPushButton *zoomInButton;
+    QPushButton *zoomOutButton;
+    QPushButton *thresholdButton;
+    QSlider *thresholdSlider;
 
-  QLabel *sliderLabel;
-  QLabel *dimensionLabel;
+    QLabel *sliderLabel;
+    QLabel *dimensionLabel;
 
-  QVBoxLayout *contentLayout;
-  QImage image;
-  QLabel *imageLabel;
-  QScrollArea* scrollArea;
-  double scaleFactor;
-  cv::Mat mat;
+    QVBoxLayout *contentLayout;
+    QImage image;
+    cv::Mat mat;
 
-  // Menu Variables
-  QMenu *fileMenu;
-  QAction *exitAction;
-  QAction *basicThresholdAction;
+    // Menu Variables
+    QMenu *fileMenu;
+    QAction *exitAction;
+    QAction *basicThresholdAction;
 
-  GraphicWindow *graphicWindow;
+    GraphicWindow *graphicWindow;
 
 
-  int sliderValue;
+    int sliderValue;
 
     MyGraphicsView *view;
     QGraphicsScene *scene;

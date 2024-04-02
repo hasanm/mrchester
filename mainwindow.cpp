@@ -78,7 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
   view  = new MyGraphicsView(this);
   view->setMouseTracking(true);
   view->setScene(scene);
-  // view->scale(.2,.2);
+  view->scale(.5,.5);
 
   contentLayout->addWidget(view);
 
@@ -127,7 +127,6 @@ void MainWindow::onLoad()
       mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
       dimensionLabel->setText(QString("Image Dimension,  Rows: %1 x Cols: %2").arg(mat.rows).arg(mat.cols));
 
-      cv::rectangle(mat, Point(0,0), Point(200, 300), Scalar(255,0,0), 2, LINE_8);
       setImage(mat);
 
 
@@ -140,7 +139,7 @@ void MainWindow::onLoad()
 
 void MainWindow::scaleImage()
 {
-    
+
 }
 
 void MainWindow::setImage(const Mat &src)
@@ -168,6 +167,8 @@ void MainWindow::setImageGray(const Mat &src)
 
   image = newImage;
   QPixmap pix = QPixmap::fromImage(image);
+  scene->removeItem(pixmap);
+  pixmap = scene->addPixmap(pix);
 }
 
 void MainWindow::onGraphic()
@@ -178,13 +179,13 @@ void MainWindow::onGraphic()
 
 void MainWindow::onZoomIn()
 {
-
+    view->scale(1.2,1.2);
 }
 
 
 void MainWindow::onZoomOut()
 {
-
+    view->scale(0.8,0.8);
 }
 
 void MainWindow::on_inputPushButton_pressed()
@@ -238,61 +239,6 @@ void MainWindow::defaultLoad()
     {
       mat = imread(fileName.toStdString().c_str(), IMREAD_COLOR);
       dimensionLabel->setText(QString("Image Dimension,  Rows: %1 x Cols: %2").arg(mat.rows).arg(mat.cols));
-
-      // Scalar color[3] = {Scalar(255,0,0), Scalar(0,255,0), Scalar(0,0,255)};
-      //
-      // for (int i = 0; i < 256; i++) {
-      //     int x1, y1, x2, y2;
-      //     x1 = i * 10;
-      //     y1 = 0;
-      //
-      //     x2 = x1;
-      //     y2 = 600;
-      //
-      //
-      //     if (i%10 == 0) {
-      //         line(mat, Point(x1,y1), Point(x2,y2), Scalar(255,0,0), 1, LINE_8);
-      //     } else if (i%5 == 0) {
-      //         line(mat, Point(x1,y1), Point(x2,y2), Scalar(100,100,0), 1, LINE_8);
-      //     } else {
-      //         line(mat, Point(x1,y1), Point(x2,y2), Scalar(0,0,0), 1, LINE_8);
-      //     }
-      // }
-      //
-      // cv::rectangle(mat, Point(65,0) , Point(145,65), color[0], 2, LINE_8);
-      // cv::rectangle(mat, Point(200,0), Point(280,65), color[0], 2, LINE_8);
-      // cv::rectangle(mat, Point(330,0), Point(410,65), color[0], 2, LINE_8);
-      // cv::rectangle(mat, Point(465,0), Point(545,65), color[0], 2, LINE_8);
-      // cv::rectangle(mat, Point(600,0), Point(700,65), color[0], 2, LINE_8);
-
-      // for (int i = 0; i < 5; i++) {
-      //     int x1 = i * 130 + 10;
-      //     int y1 = 0;
-      //     int x2 = x1 + 130 + (i == 4) ? 20 : 0;
-      //     int y2 = 65;
-      //     rectangle(mat, Point(x1,y1), Point(x2,y2), color[i%3], 2, LINE_8);
-      //
-      //     int x3 = x1 + 40;
-      //     int y3 = y1 + 10;
-      //     // rectangle(mat, Point(x3,y3), Point(x2,y2), color[(i+1)%3], 2, LINE_8);
-      //
-      //
-      //     int x4 = x1 + 10;
-      //     int y4 = y1 + 28;
-      //     int x5 = x4 + 28;
-      //     int y5 = y4 + 22;
-      //     // rectangle(mat, Point(x4,y4), Point(x5,y5), color[(i+2)%3], 2, LINE_8);
-      //
-      //     Mat clipped (mat, Rect(x1,y1,x2, y2));
-      //     if (i == 0) {
-      //         cvtColor(clipped, gray, COLOR_BGR2GRAY);
-      //         threshold(gray, tmp, 150, 255, cv::THRESH_BINARY_INV);
-      //         // cv::resize(tmp,tmp1, Size(1920,1080), 0, 0, INTER_AREA);
-      //         imwrite("out.png", tmp);
-      //     }
-      // // rectangle(mat, Point(x,0), Point(x + 110, 50), Scalar(255,0,0), 2, LINE_8);
-      // }
-
 
       setImage(mat);
 
